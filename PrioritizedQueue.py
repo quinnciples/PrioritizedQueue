@@ -70,8 +70,9 @@ class QueueManager:
             if not reqs:
                 print('No Requirements')
             else:
-                for req in reqs:
-                    print(req)
+                #for req in reqs:
+                    #print(req)
+                print(', '.join(reqs))
             print('--------------')
 
     def nextBatch(self):
@@ -84,12 +85,16 @@ class QueueManager:
         batch = []
         for item in self.items:
             reqs = self.requirements[item]
-            ready = True
-            if reqs:
-                for req in reqs:
-                    if req not in self.processed:
-                        ready = False
-                        break
+            
+            # ready = True
+            # if reqs:
+            #     for req in reqs:
+            #         if req not in self.processed:
+            #             ready = False
+            #             break
+
+            ready = all(req in self.processed for req in reqs) if reqs else True
+
             if ready and item not in self.processed:
                 batch.append(item)
         return batch
@@ -109,7 +114,6 @@ class QueueManager:
                 self.processed.append(newitem)
                 print(f'Processing: {newitem}')
         print()
-# ...existing
 
 if __name__ == "__main__":
     try:
@@ -126,7 +130,7 @@ if __name__ == "__main__":
             queue.addItem(i, requirements)
 
         nextBatch = queue.nextBatch()
-        # queue.printSummary()
+        queue.printSummary()
         while nextBatch:
             print('Next Batch', nextBatch)
             queue.processItem(nextBatch)
