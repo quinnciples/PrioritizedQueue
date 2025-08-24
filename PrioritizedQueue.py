@@ -84,7 +84,7 @@ class QueueManager:
         """
         batch = []
         for item in self.items:
-            reqs = self.requirements[item]
+            # reqs = self.requirements[item]
             
             # ready = True
             # if reqs:
@@ -93,7 +93,7 @@ class QueueManager:
             #             ready = False
             #             break
 
-            ready = all(req in self.processed for req in reqs) if reqs else True
+            ready = all(req in self.processed for req in self.requirements[item]) if self.requirements[item] else True
 
             if ready and item not in self.processed:
                 batch.append(item)
