@@ -5,11 +5,30 @@ class RequirementsNotInQueue(Exception):
 
 class QueueManager:
     def __init__(self):
+        """
+        Initializes a new QueueManager instance.
+
+        Attributes:
+            items (list): List of items in the queue.
+            requirements (dict): Mapping of item to its requirements.
+            processed (list): List of processed items.
+        """
         self.items = []
         self.requirements = {}
         self.processed = []
 
     def addItem(self, item, requirements):
+        """
+        Adds an item to the queue with its requirements.
+
+        Args:
+            item (str): The item to add.
+            requirements (list, str, or None): Requirements for the item.
+                Can be None, a string, or a list of strings.
+
+        Raises:
+            RequirementsNotInQueue: If any requirement is not already in the queue.
+        """
         if item in self.items:
             return
         # Normalize requirements to list or None
@@ -29,9 +48,21 @@ class QueueManager:
         self.requirements[item] = reqs if reqs else None
 
     def getRequirements(self, item):
+        """
+        Retrieves the requirements for a given item.
+
+        Args:
+            item (str): The item to query.
+
+        Returns:
+            list or None: The requirements for the item, or None if none exist.
+        """
         return self.requirements.get(item, None)
 
     def printSummary(self):
+        """
+        Prints a summary of all items in the queue and their requirements.
+        """
         for item in self.items:
             print(f'Item: {item}')
             print('Requires:')
@@ -44,6 +75,12 @@ class QueueManager:
             print('--------------')
 
     def nextBatch(self):
+        """
+        Determines the next batch of items that are ready to be processed.
+
+        Returns:
+            list: Items whose requirements have all been processed and are not yet processed.
+        """
         batch = []
         for item in self.items:
             reqs = self.requirements[item]
@@ -58,6 +95,12 @@ class QueueManager:
         return batch
 
     def processItem(self, item):
+        """
+        Marks an item or a list of items as processed and prints their names.
+
+        Args:
+            item (str or list): The item or list of items to process.
+        """
         if isinstance(item, str):
             self.processed.append(item)
             print(f'Processing: {item}')
@@ -66,6 +109,7 @@ class QueueManager:
                 self.processed.append(newitem)
                 print(f'Processing: {newitem}')
         print()
+# ...existing
 
 if __name__ == "__main__":
     try:
